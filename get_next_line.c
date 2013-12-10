@@ -6,7 +6,7 @@
 /*   By: bmbarga <bmbarga@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/12/02 16:36:18 by bmbarga           #+#    #+#             */
-/*   Updated: 2013/12/08 18:00:13 by bmbarga          ###   ########.fr       */
+/*   Updated: 2013/12/10 15:51:36 by bmbarga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ static void		work_on_buffers(char *buf_tmp, int i, char *buf, int choice)
 
 static int		aux_get_next_line(char *buf_tmp, char **str, char **line, int fd)
 {
+	int ret;
+
 	if (!(str[STR] = ft_strjoin(buf_tmp, NULL)))
 		return (-1);
-	while (read(fd, str[BUFF], BUFF_SIZE))
+	while ((ret = read(fd, str[BUFF], BUFF_SIZE)) && ret != -1)
 	{
 		if ((str[TMP] = ft_strchr(str[BUFF], '\n')))
 		{
@@ -55,6 +57,8 @@ static int		aux_get_next_line(char *buf_tmp, char **str, char **line, int fd)
 			return (-1);
 		str[BUFF] = ft_memset(str[BUFF], '\0', BUFF_SIZE);
 	}
+	if (ret == -1)
+		return (-1);
 	buf_tmp[BUFF_SIZE] = MY_EOF;
 	return (1);
 }
